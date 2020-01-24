@@ -26,7 +26,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 
   void didChangeDependencies() {
     //check if running for first time
-    if (!_isInit) {
+    if (_isInit) {
       Provider.of<Products>(context).fetchAndSetProducts();
     }
     _isInit = false;
@@ -35,7 +35,6 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final products = Provider.of<Products>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('Shop App'),
