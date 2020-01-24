@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:shop_app/providers/product.dart';
 
 class Products with ChangeNotifier {
@@ -50,17 +51,44 @@ class Products with ChangeNotifier {
     return items.firstWhere((product) => product.id == id);
   }
 
-  void addProduct(Product product) {
+  Future<void> fetchAndSetProducts() async {
+    const url = 'https://shop-app-a0242.firebaseio.com/';
+    try {
+      final response = await http.get(url);
+      print(response);
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  //generic future no data passed back
+  Future<void> addProduct(Product product) async {
     const url = 'https://shop-app-a0242.firebaseio.com/products.json';
-    final newProduct = Product(
-      title: product.title,
-      description: product.description,
-      imageUrl: product.imageUrl,
-      price: product.price,
-      id: DateTime.now().toString(),
-    );
-    _items.add(newProduct);
-    notifyListeners();
+    try {
+      //convert hard coded map to JSON
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+        }),
+      );
+      final newProduct = Product(
+        title: product.title,
+        description: product.description,
+        imageUrl: product.imageUrl,
+        price: product.price,
+        id: json.decode(response.body)['name'],
+      );
+      _items.add(newProduct);
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      //throw makes error available in editProductScreen
+      throw error;
+    }
   }
 
   void updateProduct(String id, Product newProduct) {

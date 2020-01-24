@@ -6,6 +6,8 @@ import 'package:shop_app/widgets/badge.dart';
 import 'package:shop_app/widgets/app_drawer.dart';
 
 import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/providers/products.dart';
+
 import 'package:shop_app/screens/cart_screen.dart';
 
 enum FilterOptions {
@@ -20,12 +22,23 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavourites = false;
+  var _isInit = true;
+
+  void didChangeDependencies() {
+    //check if running for first time
+    if (!_isInit) {
+      Provider.of<Products>(context).fetchAndSetProducts();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     // final products = Provider.of<Products>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('SelflyCA'),
+        title: Text('Shop App'),
         actions: <Widget>[
           PopupMenuButton(
             onSelected: (FilterOptions selectedValue) {
