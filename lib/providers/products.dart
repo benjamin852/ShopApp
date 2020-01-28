@@ -80,7 +80,6 @@ class Products with ChangeNotifier {
     }
   }
 
-  //generic future no data passed back
   Future<void> addProduct(Product product) async {
     const url = 'https://shop-app-a0242.firebaseio.com/products.json';
     try {
@@ -92,6 +91,7 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
+          'isFavourite': product.isFavourite,
         }),
       );
       final newProduct = Product(
