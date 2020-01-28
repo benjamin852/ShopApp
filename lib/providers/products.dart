@@ -6,8 +6,10 @@ import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/models/http_exception.dart';
 
 class Products with ChangeNotifier {
-  //not final as we replace with list from server
+  final String authToken;
+  Products(this.authToken, this._items);
 
+  //not final as we replace with list from server
   List<Product> _items = [];
 
   List<Product> get items {
@@ -23,7 +25,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    const url = 'https://shop-app-a0242.firebaseio.com/products.json';
+    final url =
+        'https://shop-app-a0242.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final responseData = json.decode(response.body) as Map<String, dynamic>;

@@ -22,9 +22,19 @@ class MyApp extends StatelessWidget {
     //Provider not listener
     return MultiProvider(
       providers: [
-        //value does not depend on context
         ChangeNotifierProvider.value(value: Auth()),
-        ChangeNotifierProvider.value(value: Products()),
+        //1. look for provider which providers auth object
+        //1. before the proxyProvider. rebuilds when auth changes
+        //2. type of value we're providing here
+        ChangeNotifierProxyProvider<Auth, Products>(
+          update: (
+            ctx,
+            auth,
+            previousProducts,
+          ) =>
+              Products(auth.token,
+                  previousProducts == null ? [] : previousProducts.items),
+        ),
         ChangeNotifierProvider.value(value: Cart()),
         ChangeNotifierProvider.value(value: Orders()),
       ],
