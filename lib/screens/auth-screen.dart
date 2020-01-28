@@ -2,7 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-enum AuthMode { Signup, Login }
+enum AuthMode {
+  Signup,
+  Login,
+}
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';
