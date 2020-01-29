@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         builder: (ctx, authData, _) => MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-            primarySwatch: Colors.purple,
+            primarySwatch: Colors.blue,
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato',
           ),
