@@ -3,13 +3,15 @@ import 'package:shop_app/screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/providers/auth.dart';
 
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context, listen: false);
     //dont rebuild if cart changes
+    final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
 
     //force child widget to wrap into parent shape
     return ClipRRect(
@@ -31,7 +33,7 @@ class ProductItem extends StatelessWidget {
             builder: (context, product, child) => IconButton(
               icon: Icon(
                   product.isFavourite ? Icons.favorite : Icons.favorite_border),
-              onPressed: () => product.toggleFavouriteStatus(),
+              onPressed: () => product.toggleFavouriteStatus(authData.token),
               color: Theme.of(context).accentColor,
             ),
           ),
