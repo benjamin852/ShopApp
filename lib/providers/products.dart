@@ -49,7 +49,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    const url = 'https://shop-app-a0242.firebaseio.com/products.json';
+    final url =
+        'https://shop-app-a0242.firebaseio.com/products.json?auth=$authToken';
     try {
       //convert hard coded map to JSON
       final response = await http.post(
@@ -81,7 +82,8 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final productIndex = _items.indexWhere((product) => product.id == id);
     if (productIndex >= 0) {
-      final url = 'https://shop-app-a0242.firebaseio.com/products/$id.json';
+      final url =
+          'https://shop-app-a0242.firebaseio.com/products/$id.json?auth=$authToken';
 
       await http.patch(url,
           body: json.encode({
@@ -95,25 +97,9 @@ class Products with ChangeNotifier {
     }
   }
 
-  // void deleteProduct(String id) {
-  //   // _items.removeWhere((product) => product.id == id);
-  //   final existingProductIndex =
-  //       _items.indexWhere((product) => product.id == id);
-  //   var existingProduct = _items[existingProductIndex];
-  //   http.delete(url).then((response) {
-  //     print(response.statusCode);
-  //     if (response.statusCode >= 400) {}
-  //     existingProduct = null;
-  //   }).catchError((_) {
-  //     _items.insert(existingProductIndex, existingProduct);
-  //     notifyListeners();
-  //   });
-  //   items.removeAt(existingProductIndex);
-  //   notifyListeners();
-  // }
-
   Future<void> deleteProduct(String id) async {
-    final url = 'https://shop-app-a0242.firebaseio.com/products/$id';
+    final url =
+        'https://shop-app-a0242.firebaseio.com/products/$id.json?auth=$authToken';
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
