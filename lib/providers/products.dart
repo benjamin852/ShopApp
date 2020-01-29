@@ -7,7 +7,8 @@ import 'package:shop_app/models/http_exception.dart';
 
 class Products with ChangeNotifier {
   final String authToken;
-  Products(this.authToken, this._items);
+  final String userId;
+  Products(this.authToken, this.userId, this._items);
 
   //not final as we replace with list from server
   List<Product> _items = [];
@@ -25,11 +26,19 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url =
+    var url =
         'https://shop-app-a0242.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final responseData = json.decode(response.body) as Map<String, dynamic>;
+      if (responseData == null) {
+        return;
+      }
+      //override it since we wont need above url anymore
+      url =
+          'https://shop-app-a0242.firebaseio.com/userFavourites/$userId.json?auth=$authToken';
+      final favouriteResponse = await http.get(url);
+      final favouriteData = json.decode(favouriteResponse.body);
       final List<Product> loadedProducts = [];
       responseData.forEach((productId, productData) {
         loadedProducts.add(Product(
@@ -37,8 +46,10 @@ class Products with ChangeNotifier {
           title: productData['title'],
           description: productData['description'],
           price: productData['price'],
+          //same productId as in responseData
+          isFavourite:
+              favouriteData == null ? false : favouriteData[productId] ?? false,
           imageUrl: productData['imageUrl'],
-          isFavourite: productData['isFavourite'],
         ));
       });
       _items = loadedProducts;
