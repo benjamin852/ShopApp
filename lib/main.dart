@@ -43,8 +43,11 @@ class MyApp extends StatelessWidget {
             auth,
             previousOrders,
           ) =>
-              Orders(auth.token,
-                  previousOrders == null ? [] : previousOrders.orders),
+              Orders(
+            auth.token,
+            auth.userId,
+            previousOrders == null ? [] : previousOrders.orders,
+          ),
         )
       ],
       //build MaterialApp() whenever auth changes
