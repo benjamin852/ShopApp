@@ -6,6 +6,8 @@ import 'package:shop_app/screens/user_products_screen.dart';
 
 import 'package:shop_app/providers/auth.dart';
 
+import 'package:shop_app/helpers/custom_route.dart';
+
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,11 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.shop),
             title: Text('Shop'),
-            onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+            onTap: () => Navigator.of(context).pushReplacement(
+              CustomRoute(
+                builder: (ctx) => OrdersScreen(),
+              ),
+            ),
           ),
           Divider(),
           ListTile(
