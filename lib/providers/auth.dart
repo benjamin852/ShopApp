@@ -14,6 +14,8 @@ class Auth with ChangeNotifier {
 
   bool get isAuthenticated {
     //if not equal to null we're authenticated
+    print(token);
+    print('the token^');
     return token != null;
   }
 
@@ -82,13 +84,15 @@ class Auth with ChangeNotifier {
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('userData')) {
+    if (!prefs.containsKey('userData')) {
+      //if no user data then no valid token
       return false;
     }
     final extractedUserData =
         json.decode(prefs.getString('userData')) as Map<String, Object>;
     final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
-    if (expiryDate.isAfter(DateTime.now())) {
+    if (expiryDate.isBefore(DateTime.now())) {
+      //if expiry date happened already token is invalid
       return false;
     }
     _token = extractedUserData['token'];
